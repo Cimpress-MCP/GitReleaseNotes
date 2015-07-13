@@ -7,7 +7,7 @@ from mock import Mock
 
 class HtmlWriter_Test(unittest.TestCase):
     def test_returnsHtmlExtension(self):
-        writer = HtmlWriter.HtmlWriter(None,None)
+        writer = HtmlWriter.HtmlWriter(None)
         self.assertEqual(".html", writer.getExtension())
 
     def ticket_side_effect(*args, **kwargs):
@@ -31,7 +31,7 @@ class HtmlWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo.side_effect = self.ticket_side_effect
 
-        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -53,7 +53,7 @@ class HtmlWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -75,7 +75,7 @@ class HtmlWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
         output = writer.decorateContent("abc")
 
         self.assertEqual("abc", output)

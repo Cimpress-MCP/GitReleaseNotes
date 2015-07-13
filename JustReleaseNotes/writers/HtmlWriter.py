@@ -3,7 +3,7 @@ from string import Template
 
 class HtmlWriter:
 
-    def __init__(self, ticketProvider, templateString):
+    def __init__(self, ticketProvider, templateString=None):
         self.__ticketProvider = ticketProvider
         self.__template = "${content}"
         if (templateString is not None):

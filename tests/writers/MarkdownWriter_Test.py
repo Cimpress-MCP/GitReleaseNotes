@@ -6,7 +6,7 @@ from mock import Mock
 
 class MarkdownWriter_Test(unittest.TestCase):
     def test_returnsMdExtension(self):
-        writer = MarkdownWriter.MarkdownWriter(None, None)
+        writer = MarkdownWriter.MarkdownWriter(None)
         self.assertEqual(".md", writer.getExtension())
 
     def ticket_side_effect(*args, **kwargs):
@@ -30,7 +30,7 @@ class MarkdownWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect
 
-        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -45,7 +45,7 @@ class MarkdownWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -60,7 +60,7 @@ class MarkdownWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
         output = writer.decorateContent("abc")
 
         self.assertEqual("abc", output)
