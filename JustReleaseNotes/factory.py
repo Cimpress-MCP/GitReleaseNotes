@@ -10,6 +10,15 @@ def createWithConfig(module, name, conf):
         e = sys.exc_info()[1]
         raise Exception("Unable to create module provider {0} from module {1}: {2}".format(conf["Provider"], module, e))
 
+def createWithConfigAndParam(module, name, conf, param):
+    try:
+        module = importlib.import_module(module + ".{0}".format(name))
+        clazz = getattr(module, name)
+        return clazz(conf, param)
+    except:
+        e = sys.exc_info()[1]
+        raise Exception("Unable to create module provider {0} from module {1}: {2}".format(conf["Provider"], module, e))
+
 def createWithName(module, name):
    try:
         module = importlib.import_module(module + ".{0}".format(name))

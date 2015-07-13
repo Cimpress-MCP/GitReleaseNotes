@@ -1,12 +1,13 @@
 import unittest
 from JustReleaseNotes.writers import HtmlWriter
+from string import Template
 from mock import MagicMock
 from mock import Mock
 
 
 class HtmlWriter_Test(unittest.TestCase):
     def test_returnsHtmlExtension(self):
-        writer = HtmlWriter.HtmlWriter(None)
+        writer = HtmlWriter.HtmlWriter(None,None)
         self.assertEqual(".html", writer.getExtension())
 
     def ticket_side_effect(*args, **kwargs):
@@ -30,7 +31,7 @@ class HtmlWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo.side_effect = self.ticket_side_effect
 
-        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -52,7 +53,7 @@ class HtmlWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -69,6 +70,25 @@ class HtmlWriter_Test(unittest.TestCase):
                          '<li style="font-size:14px"><a href="http://some.url">ABCD-2</a> ABCD2 ticket that references <a href="http://some.url/ABCD-1">ABCD-1</a></li>\n'
                          '<li style="font-size:14px"><a href="http://some.url">ABCD-1</a> ABCD1 ticket that references <a href="http://some.url/ABCD-2">ABCD-2</a></li>\n</ul>\n</div>\n',
                          output)
+
+    def test_decorateContent_withDefaultTemplate_ReturnsContentOnly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, None)
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("abc", output)
+
+    def test_decorateContent_withProvidedTemplate_ReplacesContentCorrectly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, "begin ${content} end")
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("begin abc end", output)
+
 
 
 if __name__ == '__main__':

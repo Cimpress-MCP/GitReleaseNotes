@@ -37,6 +37,7 @@ class ReleaseNotes:
 
         if len(tickets) == 0:
             return ""
+        
         return self.__Writer.printVersionBlock(deps, version, date, tickets)
 
     def generateReleaseNotesByPromotedVersions(self):
@@ -74,4 +75,5 @@ class ReleaseNotes:
             content = content + [self.__printVersionBlock(self.__PendingPromotionCaption, ticketsSoFar)]           
         
         content.sort(reverse=True)        
-        return "\n".join(content)
+
+        return self.__Writer.decorateContent("\n".join(content))

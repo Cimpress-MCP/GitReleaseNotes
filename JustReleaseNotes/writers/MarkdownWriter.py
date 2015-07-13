@@ -1,12 +1,21 @@
 import re
+from string import Template
 
 class MarkdownWriter:
 
-    def __init__(self, ticketProvider):
+    def __init__(self, ticketProvider, templateString = None):
         self.__ticketProvider = ticketProvider
+        self.__template = "${content}"
+        if (templateString is not None):
+            self.__template = templateString
 
     def getExtension(self):
         return ".md"
+
+    def decorateContent(self, content):
+        t = Template(self.__template)
+        data = { "content":content }
+        return t.substitute(data)
 
     def printVersionBlock(self, deps, version, date, tickets):
         data = ["## {0} ##".format(version)]

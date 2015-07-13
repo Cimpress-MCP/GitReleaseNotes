@@ -1,5 +1,5 @@
 import JustReleaseNotes
 from JustReleaseNotes import factory
 
-def create(name, ticketProvider):
-    return JustReleaseNotes.factory.createWithConfig("JustReleaseNotes.writers", name, ticketProvider)
+def create(name, ticketProvider, templateString):
+    return JustReleaseNotes.factory.createWithConfigAndParam("JustReleaseNotes.writers", name, ticketProvider, templateString)

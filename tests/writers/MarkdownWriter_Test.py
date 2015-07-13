@@ -6,7 +6,7 @@ from mock import Mock
 
 class MarkdownWriter_Test(unittest.TestCase):
     def test_returnsMdExtension(self):
-        writer = MarkdownWriter.MarkdownWriter(None)
+        writer = MarkdownWriter.MarkdownWriter(None, None)
         self.assertEqual(".md", writer.getExtension())
 
     def ticket_side_effect(*args, **kwargs):
@@ -30,7 +30,7 @@ class MarkdownWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect
 
-        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -45,7 +45,7 @@ class MarkdownWriter_Test(unittest.TestCase):
         mockedTicketProvider = Mock()
         mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
 
-        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
         deps = {"ANY": "SomeComponent1: 2.3.*; SomeComponent2: 1.0.0"}
         version = "1.0.2.0"
         date = "01-02-2015"
@@ -55,6 +55,24 @@ class MarkdownWriter_Test(unittest.TestCase):
             '## 1.0.2.0 ##\n01-02-2015\n\n*  [DBA-2](http://some.url) DBA2 ticket that references [#DBA-1](http://some.url/DBA-1)\n*  '
             '[DBA-1](http://some.url) DBA1 ticket that references [#DBA-2](http://some.url/DBA-2)\n',
             output)
+
+    def test_decorateContent_withDefaultTemplate_ReturnsContentOnly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, None)
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("abc", output)
+
+    def test_decorateContent_withProvidedTemplate_ReplacesContentCorrectly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, "begin ${content} end")
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("begin abc end", output)
 
 
 if __name__ == '__main__':
