@@ -74,6 +74,8 @@ class ReleaseNotes:
         if len(ticketsSoFar) > 0:
             content = content + [self.__printVersionBlock(self.__PendingPromotionCaption, ticketsSoFar)]           
         
-        content.sort(reverse=True)        
+        content.sort(reverse=True)
 
-        return self.__Writer.decorateContent("\n".join(content))
+        templatedContent = self.__Writer.decorateContent("\n".join(content))
+
+        return templatedContent

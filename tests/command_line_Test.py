@@ -22,6 +22,8 @@ class ReleaseNote_Test(unittest.TestCase):
         writers_factory, path_exists, path_makedirs):
 
         writer_mock = MagicMock()
+        writer_mock.decorateContent.return_value = ""
+        
         writers_factory.create.return_value = writer_mock
         writer_mock.getExtension.return_value = ".ext"
 
