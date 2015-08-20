@@ -1,5 +1,6 @@
 import unittest
 from JustReleaseNotes.writers import HtmlWriter
+from string import Template
 from mock import MagicMock
 from mock import Mock
 
@@ -69,6 +70,25 @@ class HtmlWriter_Test(unittest.TestCase):
                          '<li style="font-size:14px"><a href="http://some.url">ABCD-2</a> ABCD2 ticket that references <a href="http://some.url/ABCD-1">ABCD-1</a></li>\n'
                          '<li style="font-size:14px"><a href="http://some.url">ABCD-1</a> ABCD1 ticket that references <a href="http://some.url/ABCD-2">ABCD-2</a></li>\n</ul>\n</div>\n',
                          output)
+
+    def test_decorateContent_withDefaultTemplate_ReturnsContentOnly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider)
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("abc", output)
+
+    def test_decorateContent_withProvidedTemplate_ReplacesContentCorrectly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = HtmlWriter.HtmlWriter(mockedTicketProvider, "begin ${content} end")
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("begin abc end", output)
+
 
 
 if __name__ == '__main__':

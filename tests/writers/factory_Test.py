@@ -7,12 +7,12 @@ class factory_Test(unittest.TestCase):
 
     def test_factoryRetrievesMarkdownWriter(self):
         ticketProvider = Mock()
-        self.assertIsNotNone(JustReleaseNotes.writers.factory.create("MarkdownWriter", ticketProvider))
+        self.assertIsNotNone(JustReleaseNotes.writers.factory.create("MarkdownWriter", ticketProvider, None))
 
     def test_factoryRetrievesHtmlWriter(self):
         ticketProvider = Mock()
-        self.assertIsNotNone(JustReleaseNotes.writers.factory.create("HtmlWriter", ticketProvider))
+        self.assertIsNotNone(JustReleaseNotes.writers.factory.create("HtmlWriter", ticketProvider, None))
 
     def test_failsIfIssuerUnknown(self):
         with self.assertRaises(Exception):
-            JustReleaseNotes.writers.writers.factory.create("abrakadabra", None)
+            JustReleaseNotes.writers.writers.factory.create("abrakadabra", None, None)

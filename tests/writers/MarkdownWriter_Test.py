@@ -56,6 +56,24 @@ class MarkdownWriter_Test(unittest.TestCase):
             '[DBA-1](http://some.url) DBA1 ticket that references [#DBA-2](http://some.url/DBA-2)\n',
             output)
 
+    def test_decorateContent_withDefaultTemplate_ReturnsContentOnly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider)
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("abc", output)
+
+    def test_decorateContent_withProvidedTemplate_ReplacesContentCorrectly(self):
+        mockedTicketProvider = Mock()
+        mockedTicketProvider.getTicketInfo = self.ticket_side_effect_with_embedded_link
+
+        writer = MarkdownWriter.MarkdownWriter(mockedTicketProvider, "begin ${content} end")
+        output = writer.decorateContent("abc")
+
+        self.assertEqual("begin abc end", output)
+
 
 if __name__ == '__main__':
     unittest.main()

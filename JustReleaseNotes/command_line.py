@@ -47,7 +47,13 @@ def generate_release_notes(configFile):
             directory = os.path.join(releaseNotesConfig["pathToSave"],packageName)
             conf["Source"]["Directory"] = directory
             repo = JustReleaseNotes.sourcers.factory.create(conf["Source"])
-            writer = JustReleaseNotes.writers.factory.create(conf["ReleaseNotesWriter"], ticketProvider)
+
+            writerTemplate = "${content}"
+            if "ContentTemplateFile" in conf:
+                fileHandle = open(conf['ContentTemplateFile'])
+                writerTemplate = fileHandle.read()
+
+            writer = JustReleaseNotes.writers.factory.create(conf["ReleaseNotesWriter"], ticketProvider, writerTemplate)
 
             generator = ReleaseNotes(conf, ticketProvider, writer, repo, promotedVersionsInfo)
             releaseNotes = generator.generateReleaseNotesByPromotedVersions()
